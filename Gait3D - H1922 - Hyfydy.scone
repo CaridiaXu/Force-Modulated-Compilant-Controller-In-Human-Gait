@@ -30,21 +30,7 @@ CmaOptimizer {
 				script_file = "controllers/FMC-Controllers2.lua"
 			}
 						
-			#ScriptController {
-			#script_file = "controllers/HamstringController.lua"
-			#}
-			#ScriptController {
-			#script_file = "controllers/Rect-FemController.lua"
-			#}
-			#ScriptController {
-			#script_file = "controllers/Add-MagController.lua"
-			#}
-			#ScriptController {
-			#script_file = "controllers/Glut-MedController.lua"
-			#}
-			#ScriptController {
-			#script_file = "controllers/IliopsoasController.lua"
-			#}
+			
 		}
 		
 		
@@ -54,21 +40,7 @@ CmaOptimizer {
 			<< measures/EffortWangCubed2000.scone >>
 			<< measures/DofKnee1.scone >>
 			<< measures/Grf13.scone >>
-			#ScriptMeasure {
-			#script_file = "measures/HamstringMeasure.lua"
-			#}
-			#ScriptMeasure {
-			#script_file = "measures/Rect-FemMeasure.lua"
-			#}
-			#ScriptMeasure {
-			#script_file = "measures/Add-MagMeasure.lua"
-			#}
-			#ScriptMeasure {
-			#script_file = "measures/Glut-MedMeasure.lua"
-			#}
-			#ScriptMeasure {
-			#script_file = "measures/IliopsoasMeasure.lua"
-			#}
+			
 		}
 	}
 }

@@ -54,8 +54,8 @@ function init( model, par, side )
         
         -- Create single parameter set for each muscle
         params[muscle_name] = {
-            c = par:create_from_mean_std(muscle_name .. ".c", 0.5, 0.005, 0.0, 1.0),
-            L0 = par:create_from_mean_std(muscle_name .. ".L0", default_L0, 0.005, min, max),
+            c = par:create_from_mean_std(muscle_name .. ".c", 0.5, 0.01, 0.0, 1.0),
+            L0 = par:create_from_mean_std(muscle_name .. ".L0", default_L0, 0.01, min, max),
             alpha = config.alpha 
         }
     end

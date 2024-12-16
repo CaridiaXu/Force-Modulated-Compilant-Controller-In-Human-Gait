@@ -14,11 +14,11 @@ function init( model, par, side )
     -- }
     
     muscle_configs = {
-        {name = "rect_fem", L0 = 0.4, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
-        {name = "add_mag", L0 = 0.11, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
-        {name = "glut_med", L0 = 0.14, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
+        -- {name = "rect_fem", L0 = 0.4, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
+        -- {name = "add_mag", L0 = 0.11, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
+        -- {name = "glut_med", L0 = 0.14, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
         {name = "hamstrings", L0 = 0.4, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
-        {name = "iliopsoas", L0 = 0.26, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0}
+        -- {name = "iliopsoas", L0 = 0.26, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0}
     }
     
     -- Initialize storage for muscle objects and parameters
@@ -50,8 +50,8 @@ function init( model, par, side )
     end
     
     -- KL_r = par:create_from_mean_std( "hamstrings_r.KL", 1.0, 0.01, 0.0, 10.0)
-    KL = par:create_from_mean_std( "hamstrings.KL", 1.0, 0.01, 0.0, 2.0)
-    KV = par:create_from_mean_std( "hamstrings.KV", 0.21, 0.002, 0.0, 2.0)
+    -- KL = par:create_from_mean_std( "hamstrings.KL", 1.0, 0.01, 0.0, 2.0)
+    -- KV = par:create_from_mean_std( "hamstrings.KV", 0.21, 0.002, 0.0, 2.0)
 
     -- Global parameters
     mass = model:mass()
@@ -106,15 +106,15 @@ function update( model, time, controller )
         muscle_pair.right:add_input(activation_r)
     end
     
-    RL_l = KL * ( muscles["hamstrings"].left:tendon_length() + muscles["hamstrings"].left:fiber_length() - params["hamstrings"].L0 )
-    RL_r = KL * ( muscles["hamstrings"].right:tendon_length() + muscles["hamstrings"].right:fiber_length() - params["hamstrings"].L0 )
-    RV_l = KV * ( muscles["hamstrings"].left:normalized_fiber_velocity() )
-    RV_r = KV * ( muscles["hamstrings"].right:normalized_fiber_velocity() )
+    -- RL_l = KL * ( muscles["hamstrings"].left:tendon_length() + muscles["hamstrings"].left:fiber_length() - params["hamstrings"].L0 )
+    -- RL_r = KL * ( muscles["hamstrings"].right:tendon_length() + muscles["hamstrings"].right:fiber_length() - params["hamstrings"].L0 )
+    -- RV_l = KV * ( muscles["hamstrings"].left:normalized_fiber_velocity() )
+    -- RV_r = KV * ( muscles["hamstrings"].right:normalized_fiber_velocity() )
     
-    muscles["hamstrings"].left:add_input( RL_l )
-    muscles["hamstrings"].right:add_input( RL_r )
-    muscles["hamstrings"].left:add_input( RV_l )
-    muscles["hamstrings"].right:add_input( RV_r )
+    -- muscles["hamstrings"].left:add_input( RL_l )
+    -- muscles["hamstrings"].right:add_input( RL_r )
+    -- muscles["hamstrings"].left:add_input( RV_l )
+    -- muscles["hamstrings"].right:add_input( RV_r )
     
     return false -- change to 'return true' to terminate the simulation early
 end
@@ -129,9 +129,9 @@ function store_data( current_frame )
         current_frame:set_value(muscle_name .. "_r.FMC", activation_pair.right)
     end
 
-    current_frame:set_value("hamstrings_l_RL", RL_l)
-    current_frame:set_value("hamstrings_r_RL", RL_r)
-    current_frame:set_value("hamstrings_l_RV", RV_l)
-    current_frame:set_value("hamstrings_r_RV", RV_r)
+    -- current_frame:set_value("hamstrings_l_RL", RL_l)
+    -- current_frame:set_value("hamstrings_r_RL", RL_r)
+    -- current_frame:set_value("hamstrings_l_RV", RV_l)
+    -- current_frame:set_value("hamstrings_r_RV", RV_r)
 
 end
