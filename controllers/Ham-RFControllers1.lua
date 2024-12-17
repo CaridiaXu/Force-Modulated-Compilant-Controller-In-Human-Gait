@@ -23,10 +23,10 @@ function init( model, par, side )
     -- }
     
     muscle_configs = {
-        -- {name = "rect_fem", L0 = 0.4, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
+        {name = "rect_fem", L0 = 0.8, alpha = 1.0, min = 0.75, max = 1.0},
         -- {name = "add_mag", L0 = 0.11, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
         -- {name = "glut_med", L0 = 0.14, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
-        {name = "hamstrings", L0 = 0.78, alpha = 1.0, min = 0.7, max = 0.9},
+        {name = "hamstrings", L0 = 0.78, alpha = 1.0, min = 0.6, max = 1.0},   -- 0.78 0.85
         -- {name = "iliopsoas", L0 = 0.26, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0}
     }
     
