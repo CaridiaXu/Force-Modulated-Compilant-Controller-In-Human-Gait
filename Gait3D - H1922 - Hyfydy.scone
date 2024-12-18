@@ -27,8 +27,9 @@ CmaOptimizer {
 			NoiseController { base_noise = 0 proportional_noise = 0.01 random_seed = 0 }
 			ScriptController {
 				#script_file = "controllers/test.lua"
-				#script_file = "controllers/HamstringsControllers2.lua"
-				script_file = "controllers/Ham-RFControllers1.lua"				
+				#script_file = "controllers/HamstringsController2.lua"
+				script_file = "controllers/Ham-RFControllers2.lua"				
+				#script_file = "controllers/Ham-RF-GMControllers1.lua"			
 			}
 			
 			

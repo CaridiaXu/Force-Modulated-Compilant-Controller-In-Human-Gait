@@ -40,6 +40,12 @@ GaitStateController {
 		# Stance reflexes
 		ConditionalController {
 			states = "EarlyStance LateStance"
+			
+			#ScriptController {
+			##script_file = "controllers/test.lua"
+			#script_file = "controllers/HamstringController.lua"
+			#}			
+			
 			ReflexController {
 				MuscleReflex {
 					target = vasti
@@ -66,21 +72,21 @@ GaitStateController {
 					KL = ~2.05<0,4>
 					L0 = ~0.86<0,2>
 				}
-				#MuscleReflex {
-					#target = rect_fem
-					#delay = $ham_delay
-					#KL = ~0.5<0,4>
-					#L0 = ~0.94<0,2>
-				#}
-				#MuscleReflex {
-					#target = hamstrings
-					#delay = $ham_delay
-					##KF = ~0.1<-2,2>
-					#KL = ~1<0,4>
-					#L0 = ~0.82<0,2>
-					#KV = ~0.21<0,2>
-					#allow_neg_V = 1
-				#}
+				MuscleReflex {
+					target = rect_fem
+					delay = $ham_delay
+					KL = ~0.5<0,4>
+					L0 = ~0.94<0,2>
+				}
+				MuscleReflex {
+					target = hamstrings
+					delay = $ham_delay
+					#KF = ~0.1<-2,2>
+					KL = ~1<0,2>
+					L0 = ~0.82<0,2>
+					KV = ~0.21<0,2>
+					allow_neg_V = 1
+				}
 				MuscleReflex {
 					target = hamstrings
 					source = gastroc
@@ -114,36 +120,45 @@ GaitStateController {
 				
 				# Root stability
 				#DofReflex {
-					#target = hamstrings
-					#source = pelvis_tilt
-					#delay = $ves_delay 
-					#KP = ~0.87<-10,10>
-					##KV = ~0.1<-10,10>
-					#P0 = -0.105 # theta_ref, not optimized
+				#target = hamstrings
+				#source = pelvis_tilt
+				#delay = $ves_delay 
+				#KP = ~0.87<-10,10>
+				##KP = ~0.87<-1,1>
+				##KV = ~0.1<-10,10>
+				#P0 = -0.105 # theta_ref, not optimized
+				#}
+				
+				#ScriptController {
+				##script_file = "controllers/test.lua"
+				#script_file = "controllers/HamstringController.lua"
+				#}
+				
+				#DofReflex {
+				#target = glut_max
+				#source = pelvis_tilt
+				#delay = $ves_delay 
+				#KP = ~0.5<-10,10>
+				#KV = ~0.1<-10,10>
+				#P0 = -0.105 # theta_ref, not optimized
 				#}
 				#DofReflex {
-					#target = glut_max
-					#source = pelvis_tilt
-					#delay = $ves_delay 
-					#KP = ~0.5<-10,10>
-					#KV = ~0.1<-10,10>
-					#P0 = -0.105 # theta_ref, not optimized
+				#target = iliopsoas
+				#source = pelvis_tilt
+				#delay = $ves_delay 
+				#KP = ~-0.5<-10,10> # -k_p; -1.91 in paper
+				#KV = ~-0.1<-10,10> # -k_d; -0.25 in paper
+				#P0 = -0.105 # theta_ref, not optimized
 				#}
+				
+				
 				#DofReflex {
-					#target = iliopsoas
-					#source = pelvis_tilt
-					#delay = $ves_delay 
-					#KP = ~-0.5<-10,10> # -k_p; -1.91 in paper
-					#KV = ~-0.1<-10,10> # -k_d; -0.25 in paper
-					#P0 = -0.105 # theta_ref, not optimized
-				#}
-				#DofReflex {
-					#target = rect_fem
-					#source = pelvis_tilt
-					#delay = $ves_delay 
-					#KP = ~-1.49<-10,10> # -k_p; -1.91 in paper
-					##KV = ~-0.1<-10,10> # -k_d; -0.25 in paper
-					#P0 = -0.105 # theta_ref, not optimized
+				#target = rect_fem
+				#source = pelvis_tilt
+				#delay = $ves_delay 
+				#KP = ~-1.49<-5,5> # -k_p; -1.91 in paper
+				##KV = ~-0.1<-10,10> # -k_d; -0.25 in paper
+				#P0 = -0.105 # theta_ref, not optimized
 				#}
 				
 				# add_mag / glut_med reflexes
@@ -163,14 +178,14 @@ GaitStateController {
 					KV = ~0.2<0,2>
 					allow_neg_V = 1
 				}
-				DofReflex {
-					target = glut_med
-					source = pelvis_list
-					mirror_left = 1
-					delay = $ves_delay
-					KP = ~1.09<0,5>
-					KV = ~0.05<0,1>
-				}
+				#DofReflex {
+					#target = glut_med
+					#source = pelvis_list
+					#mirror_left = 1
+					#delay = $ves_delay
+					#KP = ~1.09<0,5>
+					#KV = ~0.05<0,1>
+				#}
 				DofReflex {
 					target = add_mag
 					source = pelvis_list
@@ -219,11 +234,11 @@ GaitStateController {
 					L0 = ~0.72<0,2>
 				}
 				
-				# posterior muscles
+				## posterior muscles
 				MuscleReflex {
 					target = hamstrings
 					delay = $ham_delay
-					KL = ~0.72<-10,10>
+					KL = ~0.72<-5,5>
 					L0 = ~1.17<0,2>
 					KV = ~0.02<0,2>
 					allow_neg_V = 1
