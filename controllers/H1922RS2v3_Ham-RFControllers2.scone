@@ -163,14 +163,14 @@ GaitStateController {
 					KV = ~0.2<0,2>
 					allow_neg_V = 1
 				}
-				#DofReflex {
-					#target = glut_med
-					#source = pelvis_list
-					#mirror_left = 1
-					#delay = $ves_delay
-					#KP = ~1.09<0,5>
-					#KV = ~0.05<0,1>
-				#}
+				DofReflex {
+					target = glut_med
+					source = pelvis_list
+					mirror_left = 1
+					delay = $ves_delay
+					KP = ~1.09<0,5>
+					KV = ~0.05<0,1>
+				}
 				DofReflex {
 					target = add_mag
 					source = pelvis_list

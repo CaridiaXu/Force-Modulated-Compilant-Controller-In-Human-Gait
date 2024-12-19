@@ -23,11 +23,11 @@ function init( model, par, side )
     -- }
     
     muscle_configs = {
-        {name = "rect_fem", L0_mean = 0.7, L0_std = 0.01 , L0_min = 0.0, L0_max = 1.0, c_mean = -0.5, c_std = 0.01, c_min = -1.0, c_max = 1.0, alpha = 1.0 },
+        {name = "rect_fem", L0_mean = 0.87, L0_std = 0.001 , L0_min = 0.85, L0_max = 0.9, c_mean = 0.5, c_std = 0.01, c_min = 0, c_max = 1.0, alpha = 1.0 },
         -- {name = "rect_fem", L0_mean = 0.7, L0_std = 0.01 , L0_min = 0.0, L0_max = 1.0, c_mean = -0.5, c_std = 0.01, c_min = -1.0, c_max = 1.0, alpha = 1.0 },
         -- {name = "add_mag", L0 = 0.11, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
         -- {name = "glut_med", L0 = 0.14, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
-        {name = "hamstrings", L0_mean = 0.82, L0_std = 0.01, L0_min = 0.0, L0_max = 2.0, c_mean = 2.0, c_std = 0.1, c_min = 0.0, c_max = 5.0,alpha = 1.0, }   -- 0.78 0.85 0.79
+        {name = "hamstrings", L0_mean = 0.82, L0_std = 0.01, L0_min = 0.0, L0_max = 2.0, c_mean = 2.0, c_std = 0.1, c_min = 0.0, c_max = 5.0,alpha = 1.0 }   -- 0.78 0.85 0.79
         -- {name = "iliopsoas", L0 = 0.26, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0}
     }
     
