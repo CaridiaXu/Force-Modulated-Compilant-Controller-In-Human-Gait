@@ -23,10 +23,11 @@ function init( model, par, side )
     -- }
     
     muscle_configs = {
-        -- {name = "rect_fem", L0 = 0.4, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
+        -- {name = "rect_fem", L0 = 0.75, alpha = 10.0, min = 0.7, max = 0.8},  -- 16 gen 1.168
+        {name = "rect_fem", L0 = 0.72, alpha = 20.0, min = 0.7, max = 0.8},  -- 9 gen 1.244
         -- {name = "add_mag", L0 = 0.11, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
         -- {name = "glut_med", L0 = 0.14, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0},
-        {name = "hamstrings", L0 = 0.78, alpha = 1.0, min = 0.6, max = 1.0},   -- 0.78 0.85
+        -- {name = "hamstrings", L0 = 0.78, alpha = 1.0, min = 0.6, max = 1.0},   -- 0.78 0.85
         -- {name = "iliopsoas", L0 = 0.26, alpha = 5.0, std = 0.01, min = 0.0, max = 1.0}
     }
     
@@ -54,12 +55,15 @@ function init( model, par, side )
         
         -- Create single parameter set for each muscle
         params[muscle_name] = {
-            c = par:create_from_mean_std(muscle_name .. ".c", 0.5, 0.1, 0.0, 5.0),   -- without muscle reflex c_mean = 2.0, with muscle reflex c_mean = 0.5
+            -- c = par:create_from_mean_std(muscle_name .. ".c", 0.5, 0.1, 0.0, 1.0),    -- 3 gen 1.177
+            c = par:create_from_mean_std(muscle_name .. ".c", 0.5, 0.1, 0.0, 1.0),   
             L0 = par:create_from_mean_std(muscle_name .. ".L0", default_L0, 0.01, min, max),
             alpha = config.alpha 
         }
     end
     
+    length_descending_left = true
+    length_descending_right = true
     -- KL_r = par:create_from_mean_std( "hamstrings_r.KL", 1.0, 0.01, 0.0, 10.0)
     -- KL = par:create_from_mean_std( "hamstrings.KL", 1.0, 0.01, 0.0, 2.0)
     -- KV = par:create_from_mean_std( "hamstrings.KV", 0.21, 0.002, 0.0, 2.0)
@@ -82,54 +86,76 @@ function update( model, time, controller )
     local GRF_r_y = GRF_r.y
     local normalized_GRF_r_y = GRF_r_y / ( -gravity_y * mass )
     
+    if normalized_GRF_l_y > 0 then
+    
+    else
+        length_descending_left = true
+    end
+
+    if normalized_GRF_r_y > 0 then
+    
+    else
+        length_descending_right = true
+    end
+
     -- Calculate and apply activations for each muscle
     activations = {}
     for muscle_name, muscle_pair in pairs(muscles) do
         -- Get muscle parameters
         local muscle_params = params[muscle_name]
-        
+        -- min_L_l = muscle_params.L0
+        -- min_L_r = muscle_params.L0
         -- Calculate left side
         -- L_l = muscle_pair.left:fiber_length() + muscle_pair.left:tendon_length()
         L_l = muscle_pair.left:normalized_fiber_length()
-
-        -- tried to use nomarlized length bc the the normalized value varies larger the non-normalized values
-        -- which could make the optimizer find the optimal value easier
-        -- but found a lot of traps in the normalized variables.
-        -- if you use scone.debug to print the value of normalized_tendon_length (NTL)
-        -- you'll find the value will be like 1.00123456. but in the analysis window, the value is 0.00123456.
-        -- And the so-called L, like hamstrings_l.L, which represents the normalized length of hamstrings of the left leg
-        -- is actually equal to the normalized fiber lenth and seems to have nothing to do with tendon length.
-        -- but meanwhile the MTU length is truly equal to tendon length plus fiber length
         
-        -- local L_l = muscle_pair.left:normalized_fiber_length() + muscle_pair.left:normalized_tendon_length() - 1
-        -- local L_l = muscle_pair.left:optimal_fiber_length() + muscle_pair.left:tendon_slack_length()
-        
-        -- scone.debug("Normalized fiber length:" .. muscle_pair.left:normalized_fiber_length())
-        -- scone.debug("Normalized tendon length:" .. muscle_pair.left:normalized_tendon_length() - 1)
-        -- scone.debug("Normalized length:" .. L_l)
-        -- scone.debug("L0:", muscle_params.L0)
-        -- scone.debug("Difference:", L_l - muscle_params.L0)
-        
-        if (L_l - muscle_params.L0) < 0 then
-            FMC_l = 0
-        else
-            FMC_l = muscle_params.c * normalized_GRF_l_y * ( L_l - muscle_params.L0 )
+        if L_l < muscle_params.L0 then
+            -- min_L_l = L_l
+            length_descending_left = false
         end
-        
+
+        if length_descending_left then
+            FMC_l = muscle_params.c * normalized_GRF_l_y * ( L_l - muscle_params.L0 )
+        else
+            FMC_l = 0
+        end
+
         local activation_l = muscle_params.alpha * FMC_l
+
+        -- if (L_l - muscle_params.L0) < 0 then
+        --     FMC_l = 0
+        -- else
+        --     FMC_l = muscle_params.c * normalized_GRF_l_y * ( L_l - muscle_params.L0 )
+        -- end
+        
+        -- local activation_l = muscle_params.alpha * FMC_l
         
         -- Calculate right side
         L_r = muscle_pair.right:normalized_fiber_length()
         -- local L_r = muscle_pair.right:fiber_length() + muscle_pair.right:tendon_length()
         -- local L_r = muscle_pair.right:optimal_fiber_length() + muscle_pair.right:tendon_slack_length()
 
-        if (L_r - muscle_params.L0) < 0 then
-            FMC_r = 0
-        else
+        if L_r < muscle_params.L0 then
+            -- min_L_l = L_l
+            length_descending_right = false
+        end
+
+        if length_descending_right then
             FMC_r = muscle_params.c * normalized_GRF_r_y * ( L_r - muscle_params.L0 )
+        else
+            FMC_r = 0
         end
 
         local activation_r = muscle_params.alpha * FMC_r
+
+        
+        -- if (L_r - muscle_params.L0) < 0 then
+        --     FMC_r = 0
+        -- else
+        --     FMC_r = muscle_params.c * normalized_GRF_r_y * ( L_r - muscle_params.L0 )
+        -- end
+
+        -- local activation_r = muscle_params.alpha * FMC_r
         
         -- Store activations for data logging
         activations[muscle_name] = {

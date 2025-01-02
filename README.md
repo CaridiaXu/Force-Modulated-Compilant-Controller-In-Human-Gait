@@ -7,14 +7,18 @@ This project implements a Force-Modulated Compliant Hip (FMCH) controller, a bio
 
 ### HamstringsController1
 Initial implementation focusing on MTU (Muscle Tendon Unit) length control:
-```
-Activation = c * GRF * (L - L0) / (mass * gravity)
-```
-where:
-- L = fiber_length + tendon_length
-- L0 = optimizable rest length parameter
-- c = optimizable gain parameter
-- GRF = normalized ground reaction force
+
+\[
+\text{Activation} = \frac{c \times \text{GRF} \times (L - L_0)}{m \times g}
+\]
+
+**Where:**
+- \(L = \text{fiber\_length} + \text{tendon\_length}\)
+- \(L_0\) = optimizable rest length parameter
+- \(c\) = optimizable gain parameter
+- \(\text{GRF}\) = normalized ground reaction force
+- \(m\) = mass
+- \(g\) = gravity
 
 Key characteristics:
 - Utilizes absolute MTU length measurements
@@ -24,13 +28,28 @@ Key characteristics:
 
 ### HamstringsController2
 Enhanced implementation utilizing normalized fiber lengths:
-```
+
+Here are the two formulas rewritten in a more formal mathematical notation:
+
+\[
+\text{Activation} = \frac{c \times \text{GRF} \times \max(L - L_0, 0)}{m \times g}
+\]
+
+**Where:**
+- \(L = \text{normalized\_fiber\_length}\)
+- \(L_0\) = normalized rest length parameter
+- \(c\) = gain parameter with expanded optimization range
+- \(\text{GRF}\) = normalized ground reaction force
+- \(m\) = mass
+- \(g\) = gravity
+
+<!-- ```
 Activation = c * GRF * max(L - L0, 0) / (mass * gravity)
 ```
 where:
 - L = normalized_fiber_length
 - L0 = normalized rest length parameter
-- c = gain parameter with expanded optimization range
+- c = gain parameter with expanded optimization range -->
 
 Enhancements:
 - Implements normalized muscle fiber length for improved parameter optimization
@@ -68,12 +87,78 @@ Key features:
 - Generates negative output similar to DofReflex behavior for 3 muscles
 - Pairs with H1922RS2v3_Ham-RF-GMController1.scone, disabling stance phase DofReflex for all three muscles
 
-### Ham-RF-GMController2
-Advanced experimental implementation:
+<!-- New update at 2025/1/2 -->
 
-Key features:
-- Achieves non-DofReflex-equivalent output during stance phase through optimized control
-- Operates alongside H1922RS2v3_Ham-RF-GMController2.scone, eliminating both reflex types for all muscles during stance
+### Ham-RF-GMController2
+
+The **Ham-RF-GMController2** is a combined controller designed to manage the activation of three key muscles during a gait cycle: the **Hamstrings**, **Rectus Femoris (RF)**, and **Gluteus Medius (GM)**. This controller integrates the functionalities of three individual controllers (`HamstringsController2`, `RFController2`, and `GMController1`) to optimize muscle activation during different phases of the stance phase. The primary goal of this controller is to improve gait efficiency by dynamically adjusting muscle activations based on ground reaction forces (GRF) and muscle lengths.
+
+#### Key Features:
+- **Hamstrings**: The controller removes the `DofReflex` but retains the `MuscleReflex` for the hamstrings.
+- **Rectus Femoris**: The controller uses length threshold mechanisms, with a focus on early stance phase activation.
+- **Gluteus Medius**: The controller removes the `DofReflex` and `LengthReflex` but can optionally retain the `VelocityReflex`.
+
+The controller works by calculating muscle activations based on the FMC formula:
+
+\[
+\text{activation} = c \times \text{GRF} \times (\text{L} - \text{L0}, 0)
+\]
+
+where:
+- \(c\) is a scaling factor,
+- \(\text{GRF}\) is the ground reaction force,
+- \(\text{L}\) is the current muscle length,
+- \(\text{L0}\) is the rest length of the muscle.
+
+#### Individual Controllers
+
+##### 1. HamstringsController2
+
+The **HamstringsController2** is responsible for controlling the hamstrings muscle. It removes the `DofReflex` but retains the `MuscleReflex`. The controller ensures that the hamstrings are activated based on the muscle length and GRF during the stance phase.
+
+###### Key Characteristics:
+- **Reflexes**: Removes `DofReflex`, retains `MuscleReflex`.
+- **Activation Formula**: Uses the standard activation formula based on GRF and muscle length.
+- **Performance**: Achieved 90 generations of optimization.
+
+##### 2. Rectus Femoris Controllers (RFController1 and RFController2)
+
+The **Rectus Femoris** is realized by two different controllers: **RFController1** and **RFController2**. Both controllers use FMC control strategy, but they differ in their activation timing and length threshold mechanisms.
+
+###### RFController1:
+- **Activation Timing**: Works during the entire stance phase.
+- **Activation Formula**: Uses the formula \(\text{activation} = c \times \text{GRF} \times (\text{L} - \text{L0}, 0)\).
+- **Performance**: Achieved 12-15 generations of optimization.
+
+###### RFController2:
+- **Activation Timing**: Works only during the early stance phase.
+- **Length Threshold**: Sets the rest length (\(\text{L0}\)) as a threshold. If the muscle length reaches \(\text{L0}\), the activation output becomes 0, regardless of subsequent muscle length changes.
+- **Performance**: Achieved 9 generations of optimization.
+
+###### Comparison:
+- **RFController1** activates the muscle throughout the stance phase.
+- **RFController2** introduces a length threshold mechanism that stops activation once the muscle reaches its rest length and activates on early stance phase, which is more biological than **RFController1**.
+
+##### 3. Gluteus Medius Controllers (GMController1 and GMController2)
+
+The **Gluteus Medius** is realized by two different controllers: **GMController1** and **GMController2**. Both controllers remove the `DofReflex` and `MuscleReflex`, but **GMController2** introduces the same length threshold mechanism from **RFController2**.
+
+###### GMController1:
+- **Reflexes**: Removes `DofReflex` and `MuscleReflex`, but can retain `VelocityReflex` with certain parameters.
+- **Activation Formula**: Uses the formula \(\text{activation} = c \times \text{GRF} \times (\text{L} - \text{L0}, 0)\).
+- **Performance**: Achieved 540 generations with velocity reflex and 457 generations without velocity reflex.
+
+###### GMController2:
+- **Reflexes**: Removes `DofReflex` and `MuscleReflex`, but can retain `VelocityReflex` with certain parameters.
+- **Activation Formula**: Similar to **RFController2**, but the mechanics inherited from **RFController2** do not work effectively in **GMController2** because the muscle length will also increase while initial rest length increasing.
+- **Performance**: Achieved 457 generations with velocity reflex and 559 generations without velocity reflex.
+
+###### Comparison:
+- **GMController2** attempts to implement a similar length threshold mechanism as **RFController2**, but it is less effective due to the change of muscle length in gait cycle.
+
+#### Conclusion
+
+The **Ham-RF-GMController** is a sophisticated combination of three individual controllers, each optimized for specific muscles and gait phases. By integrating the functionalities of `HamstringsController2`, `RFController2`, and `GMController1`, this controller provides a comprehensive solution for managing muscle activations during walking. The key differences between **RFController1** and **RFController2** lie in their activation timing and length threshold mechanisms, while **GMController1** and **GMController2** differ in their handling of the `VelocityReflex`. Overall, this controller represents a significant step forward in gait optimization, achieving 685 generations of combined optimization.
 
 ## Parameter Optimization
 

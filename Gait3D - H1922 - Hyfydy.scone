@@ -28,8 +28,10 @@ CmaOptimizer {
 			ScriptController {
 				#script_file = "controllers/test.lua"
 				#script_file = "controllers/HamstringsController2.lua"
+				#script_file = "controllers/RFController2.lua"
+				script_file = "controllers/GMController2.lua"
 				#script_file = "controllers/Ham-RFControllers2.lua"				
-				script_file = "controllers/Ham-RF-GMControllers2.lua"			
+				#script_file = "controllers/Ham-RF-GMControllers2.lua"			
 			}
 			
 			
