@@ -25,15 +25,31 @@ CmaOptimizer {
 			<< controllers/H1922RS2v3.scone >>
 			<< controllers/TorsoBO1v3.scone >>
 			NoiseController { base_noise = 0 proportional_noise = 0.01 random_seed = 0 }
-			ScriptController {
-				#script_file = "controllers/test.lua"
-				#script_file = "controllers/HamstringsController2.lua"
-				#script_file = "controllers/RFController2.lua"
-				script_file = "controllers/GMController2.lua"
-				#script_file = "controllers/Ham-RFControllers2.lua"				
-				#script_file = "controllers/Ham-RF-GMControllers2.lua"			
-			}
+			#ScriptController {
+			#script_file = "controllers/test.lua"
+			##script_file = "controllers/HamstringsController2.lua"
+			##script_file = "controllers/RFController3.lua"
+			##script_file = "controllers/GMController3.lua"
+			##script_file = "controllers/Ham-RFControllers2.lua"				
+			##script_file = "controllers/Ham-RF-GMControllers2.lua"			
+			#}
 			
+			GaitStateController {
+				#signature_postfix = RS2
+				#auto_std_factor = 0.02
+				#stance_load_threshold = ~0.2<0.001,1>
+				##swing_load_threshold = ~0.05<0.001,1>
+				#leg_load_sensor_delay = 0
+				#symmetric = 1
+				ConditionalControllers {
+					ConditionalController {
+						states = "EarlyStance LateStance" 		
+						ScriptController {
+							script_file = "controllers/GMController3.lua"					
+						}
+					}
+				}
+			}				
 			
 		}
 		
