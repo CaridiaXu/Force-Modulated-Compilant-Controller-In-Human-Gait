@@ -160,6 +160,40 @@ The **Gluteus Medius** is realized by two different controllers: **GMController1
 
 The **Ham-RF-GMController** is a sophisticated combination of three individual controllers, each optimized for specific muscles and gait phases. By integrating the functionalities of `HamstringsController2`, `RFController2`, and `GMController1`, this controller provides a comprehensive solution for managing muscle activations during walking. The key differences between **RFController1** and **RFController2** lie in their activation timing and length threshold mechanisms, while **GMController1** and **GMController2** differ in their handling of the `VelocityReflex`. Overall, this controller represents a significant step forward in gait optimization, achieving 685 generations of combined optimization.
 
+<!-- New update at 2025/1/9 -->
+
+### Ham-RF-GMController3
+
+##### Overview
+This code implements a muscle control system for bipedal walking, focusing on three key muscle groups: Rectus Femoris, Hamstrings, and Gluteus Medius. The controller uses ground reaction forces (GRF) and muscle fiber lengths to calculate appropriate muscle activations during gait. The system is designed to maintain stable walking by coordinating these muscle groups on both left and right sides of the body.
+
+##### Key Components
+
+###### 1. Rectus Femoris Controller (from RFController3.lua)
+- Unique characteristic: Uses hamstrings-based calculations for activation
+- Activation is determined by:
+  - Normalized ground reaction forces
+  - Hamstring fiber length relative to its optimal length (L0)
+  - Custom coefficient for force-length relationship
+- Helps control knee extension and hip flexion during gait
+
+###### 2. Hamstrings Controller (from HamstringsController2.lua)
+- Primary controller that influences both hamstrings and rectus femoris activation
+- Activation is calculated based on:
+  - Current muscle fiber length compared to optimal length (L0)
+  - Normalized vertical ground reaction forces
+  - Muscle-specific coefficient (c)
+- Critical for controlling knee flexion and hip extension
+
+###### 3. Gluteus Medius Controller (from GMController3.lua)
+- Features special handling for contralateral leg positions
+- Activation is suppressed when:
+  - Opposite foot has positive ground reaction force
+  - Opposite foot is positioned anterior to the current foot
+- Important for:
+  - Maintaining lateral stability during walking
+  - Hip abduction control during stance phase
+
 ## Parameter Optimization
 
 Each controller implementation features:

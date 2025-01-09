@@ -34,7 +34,6 @@ CmaOptimizer {
 				#script_file = "controllers/Ham-RFControllers2.lua"				
 				script_file = "controllers/Ham-RF-GMControllers3.lua"			
 			}
-			
 			#GaitStateController {
 			##signature_postfix = RS2
 			##auto_std_factor = 0.02
@@ -44,9 +43,9 @@ CmaOptimizer {
 			##symmetric = 1
 			#ConditionalControllers {
 			#ConditionalController {
-			#states = "EarlyStance LateStance" 		
+			#states = "EarlyStance " 		
 			#ScriptController {
-			#script_file = "controllers/GMController3.lua"					
+			#script_file = "controllers/GMController1.lua"					
 			#}
 			#}
 			#}
