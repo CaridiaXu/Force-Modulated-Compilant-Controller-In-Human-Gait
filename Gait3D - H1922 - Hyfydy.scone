@@ -3,7 +3,9 @@ CmaOptimizer {
 	min_progress = 1e-4
 	
 	#init { file = init/H1922GaitRS2Hfd4.par std_factor = 5 }	
-	init { file = init/H1922GaitRS2Hfd4_S11100RF_L0.par std_factor = 5 }
+	#init { file = init/H1922GaitRS2Hfd4_S11100RF_L0.par std_factor = 5 }
+	init { file = init/H1922GaitRS2Hfd4_1.par std_factor = 5 }
+	#init { file = init/1095_61.338_1.090.par std_factor = 10 }
 	
 	SimulationObjective {
 		max_duration = 20
