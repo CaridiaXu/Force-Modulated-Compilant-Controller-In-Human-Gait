@@ -4,8 +4,11 @@ CmaOptimizer {
 	
 	#init { file = init/H1922GaitRS2Hfd4.par std_factor = 5 }	
 	#init { file = init/H1922GaitRS2Hfd4_S11100RF_L0.par std_factor = 5 }
-	init { file = init/H1922GaitRS2Hfd4_1.par std_factor = 5 }
+	#init { file = init/H1922GaitRS2Hfd4_1.par std_factor = 5 }
+	#init { file = init/H1922GaitRS2Hfd4_2.par std_factor = 5 }
+	init { file = init/H1922GaitRS2Hfd4_3.par std_factor = 10 }
 	#init { file = init/1095_61.338_1.090.par std_factor = 10 }
+	#init { file = init/test.par std_factor = 5 }
 	
 	SimulationObjective {
 		max_duration = 20
@@ -62,7 +65,9 @@ CmaOptimizer {
 			<< measures/EffortWangCubed2000.scone >>
 			<< measures/DofKnee1.scone >>
 			<< measures/Grf13.scone >>
-			
+			ScriptMeasure {
+			script_file = "measures/GRFMeasure1.lua"
+			}
 		}
 	}
 }
