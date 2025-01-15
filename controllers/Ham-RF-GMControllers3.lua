@@ -18,7 +18,7 @@ function init( model, par, side )
     muscle_configs = {
         {name = "rect_fem", L0 = 0.885, alpha = 2.0, min = 0.85, max = 0.9},
         {name = "hamstrings", L0 = 0.95, alpha = 1.0, min = 0.95, max = 1.0},
-        -- {name = "hamstrings", L0 = 0.95, alpha = 5.0, min = 0.95, max = 1.0},
+        -- {name = "hamstrings", L0 = 0.95, alpha = 2.0, min = 0.95, max = 1.0},
         {name = "glut_med", L0 = 0.738, alpha = 1.0, min = 0.0, max = 1.0}
     }   -- 586 gen 1.754
     
