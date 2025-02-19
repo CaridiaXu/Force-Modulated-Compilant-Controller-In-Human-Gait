@@ -1,0 +1,315 @@
+CmaOptimizer {
+	signature_prefix = DATE_TIME
+	min_progress = 1e-4
+	init { file = "init/H1922GaitRS2Hfd4_8.par" std_factor = 5 }
+	SimulationObjective {
+		max_duration = 20
+		ModelHyfydy {
+			model_file = "models/H1922v2k.hfd"
+			state_init_file = "init/InitStateH1922Gait10.zml"
+			initial_state_offset = "0~0.01<-0.5,0.5>"
+			initial_state_offset_exclude = *_t?;*_u
+			initial_load = 1
+			use_omnidirectional_root_dofs = 1
+			fixed_control_step_size = 0.005
+			scone_version = 2.3.1.2903
+			hyfydy_version = 1.6.0.1116
+		}
+		CompositeController {
+			GaitStateController {
+				signature_postfix = RS2
+				auto_std_factor = 0.02
+				stance_load_threshold = "~0.2<0.001,1>"
+				leg_load_sensor_delay = 0
+				symmetric = 1
+				ConditionalControllers {
+					ConditionalController {
+						states = "EarlyStance LateStance Liftoff Swing Landing"
+						ReflexController {
+							MuscleReflex {
+								target = tib_ant
+								KL = "~0.78<0,10>"
+								L0 = "~0.52<0.5,2>"
+								KF = "~0.67<-10,10>"
+								delay = 0.035
+							}
+							MuscleReflex {
+								target = soleus
+								KL = "~0.5<0,10>"
+								L0 = "~0.84<0.5,2>"
+								KF = "~0.89<-10,10>"
+								delay = 0.035
+							}
+							MuscleReflex {
+								target = gastroc
+								KL = "~0.63<0,10>"
+								L0 = "~0.84<0.5,2>"
+								KF = "~0.83<-10,10>"
+								delay = 0.035
+							}
+							MuscleReflex {
+								target = tib_ant
+								source = soleus
+								KL = "~-0.11<-10,0>"
+								KF = "~-1.0<-2,0>"
+								delay = 0.035
+							}
+							MuscleReflex {
+								target = tib_ant
+								source = gastroc
+								KL = "~-0.09<-10,0>"
+								KF = "~-0.64<-2,0>"
+								delay = 0.035
+							}
+							MuscleReflex {
+								target = soleus
+								source = tib_ant
+								KF = "~-0.59<-2,0>"
+								delay = 0.035
+							}
+							MuscleReflex {
+								target = gastroc
+								source = tib_ant
+								KF = "~-0.65<-2,0>"
+								delay = 0.035
+							}
+						}
+					}
+					ConditionalController {
+						states = "EarlyStance LateStance"
+						ReflexController {
+							MuscleReflex {
+								target = vasti
+								delay = 0.02
+								KF = "~0.92<0,4>"
+								KL = "~1.46<0,4>"
+								L0 = "~0.5<0,2>"
+								KV = "~0.05<0,2>"
+								allow_neg_V = 1
+							}
+							MuscleReflex {
+								target = vasti
+								source = bifemsh
+								delay = 0.02
+								KL = "~-0.85<-2,0>"
+								L0 = "~0.97<0,2>"
+								KV = "~-0.1<-2,0>"
+								allow_neg_V = 0
+								allow_neg_L = 0
+							}
+							MuscleReflex {
+								target = iliopsoas
+								delay = 0.01
+								KL = "~2.05<0,4>"
+								L0 = "~0.86<0,2>"
+							}
+							MuscleReflex {
+								target = bifemsh
+								delay = 0.02
+								KL = "~1.05<0,4>"
+								L0 = "~1.10<0,2>"
+								KV = "~0.07<0,2>"
+								allow_neg_V = 1
+							}
+							MuscleReflex {
+								target = bifemsh
+								source = gastroc
+								delay = 0.02
+								KF = "~0.74<0,4>"
+								F0 = "~0.15<0,0.5>"
+								allow_neg_F = 0
+							}
+							#MuscleReflex {
+								#target = glut_max
+								#delay = 0.01
+								#KL = "~0.22<0,4>"
+								#L0 = "~0.85<0,2>"
+							#}
+							MuscleReflex {
+								target = glut_med
+								delay = 0.01
+								KV = "~0.4<0,2>"
+								allow_neg_V = 1
+							}
+							MuscleReflex {
+								target = add_mag
+								delay = 0.01
+								KL = "~1.3<0,2>"
+								L0 = "~0.7<0,2>"
+								KV = "~0.2<0,2>"
+								allow_neg_V = 1
+							}
+							DofReflex {
+								target = add_mag
+								source = pelvis_list
+								mirror_left = 1
+								delay = 0.05
+								KP = "~-0.5<-5,0>"
+								KV = "~-0.01<-1,0>"
+							}
+						}
+					}
+					ConditionalController {
+						states = "Liftoff Swing Landing"
+						ReflexController {
+							MuscleReflex {
+								target = iliopsoas
+								delay = 0.01
+								KL = "~1.05<0,10>"
+								L0 = "~0.67<0,2>"
+							}
+							MuscleReflex {
+								target = rect_fem
+								delay = 0.015
+								KL = "~0.51<0,10>"
+								L0 = "~1.0<0,1.1>"
+							}
+							DofReflex {
+								target = iliopsoas
+								source = pelvis_tilt
+								delay = 0.05
+								KP = "~0.45<0,10>"
+								P0 = -0.105
+							}
+							MuscleReflex {
+								target = iliopsoas
+								source = hamstrings
+								delay = 0.015
+								KL = "~-2.58<-10,10>"
+								L0 = "~0.72<0,2>"
+							}
+							MuscleReflex {
+								target = hamstrings
+								delay = 0.015
+								KL = "~0.72<-10,10>"
+								L0 = "~1.0<0,1.11>"
+								KV = "~0.02<0,2>"
+								allow_neg_V = 1
+							}
+							MuscleReflex {
+								target = bifemsh
+								delay = 0.02
+								KF = "~0.1<0,4>"
+							}
+							MuscleReflex {
+								target = glut_max
+								delay = 0.01
+								KL = "~1<-10,10>"
+								L0 = "~1<0,2>"
+							}
+							BodyOrientationReflex {
+								target = glut_med
+								source = femur_o
+								axis [ 1 0 0 ]
+								delay = 0.05
+								KP = "~0.4<-3,3>"
+								KV = "~0.2<-1,1>"
+								C0 = "-0.04~0.01<-1,1>"
+							}
+							BodyOrientationReflex {
+								target = add_mag
+								source = femur_o
+								axis [ 1 0 0 ]
+								delay = 0.05
+								KP = "~-0.6<-3,3>"
+								KV = "~-0.25<-1,1>"
+								C0 = "-0.02~0.01<-1,1>"
+							}
+						}
+					}
+				}
+			}
+			ReflexController {
+				auto_std_factor = 0.05
+				name = lumbar_joints
+				dual_sided = 0
+				BodyOrientationReflex {
+					target = lumbar_extension
+					source = torso
+					delay = 0.005
+					KP = "~150<0,500>"
+					KV = "~20<0,50>"
+					P0 = "-0.11~0.001<-0.5,0.5>"
+				}
+				BodyOrientationReflex {
+					target = lumbar_bending
+					source = torso
+					axis [ 1 0 0 ]
+					delay = 0.005
+					KP = "~150<0,500>"
+					KV = "~20<0,50>"
+					P0 = 0
+				}
+				BodyOrientationReflex {
+					target = lumbar_rotation
+					source = torso
+					axis [ 0 1 0 ]
+					delay = 0.005
+					KP = "~150<0,500>"
+					KV = "~30<0,50>"
+					P0 = 0
+				}
+			}
+			NoiseController {
+				base_noise = 0
+				proportional_noise = 0.01
+				random_seed = 0
+			}
+			ScriptController {
+				script_file = "controllers/FMCH.lua"				
+				#script_file = "controllers/Ham-RF-GMControllers4.lua"
+			}
+		}
+		CompositeMeasure {
+			GaitMeasure {
+				name = Gait
+				weight = 100
+				threshold = 0.05
+				termination_height = 0.85
+				min_velocity = 1.0
+			}
+			EffortMeasure {
+				name = Effort
+				weight = 0.1
+				measure_type = Wang2012
+				use_cost_of_transport = 1
+			}
+			EffortMeasure {
+				name = MuscleActivation
+				weight = 2000
+				measure_type = CubedMuscleActivation
+				use_average_per_muscle = 1
+				use_cost_of_transport = 1
+			}
+			CompositeMeasure {
+				name = DofLimits
+				signature = K1
+				symmetric = 1
+				DofMeasure {
+					weight = 0.1
+					dof = ankle_angle
+					position { min = -60 max = 60 squared_penalty = 1 }
+				}
+				DofMeasure {
+					weight = 0.02
+					threshold = 1
+					threshold_transition = 0.5
+					dof = knee_angle
+					force { min = 0 max = 0 abs_penalty = 1 }
+				}
+				DofMeasure {
+					dof = pelvis_tilt
+					position { min = -45 max = 0 abs_penalty = 1 }
+				}
+			}
+			ReactionForceMeasure {
+				name = GRF
+				signature = G13
+				start_time = 1
+				weight = 10
+				max = 1.3
+				abs_penalty = 1
+			}
+		}
+	}
+}

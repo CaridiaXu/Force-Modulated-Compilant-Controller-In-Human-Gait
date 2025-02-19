@@ -37,21 +37,11 @@ GaitStateController {
 			}
 		}
 		
-		#ConditionalController {
-		#states = "EarlyStance LateStance" 		
-		#ScriptController {
-		#script_file = "controllers/GMController2.lua"					
-		#}
-		#}
-		
 		# Stance reflexes
 		ConditionalController {
 			states = "EarlyStance LateStance"
 			
-			#ScriptController {
-			#script_file = "controllers/GMController2.lua"					
-			#}			
-			
+
 			ReflexController {
 				MuscleReflex {
 					target = vasti
@@ -78,29 +68,29 @@ GaitStateController {
 					KL = ~2.05<0,4>
 					L0 = ~0.86<0,2>
 				}
-				MuscleReflex {
-					target = rect_fem
-					delay = $ham_delay
-					KL = ~0.5<0,4>
-					L0 = ~0.94<0,2>
-				}
-				MuscleReflex {
-					target = hamstrings
-					delay = $ham_delay
-					#KF = ~0.1<-2,2>
-					KL = ~1<0,4>
-					L0 = ~0.82<0,2>
-					KV = ~0.21<0,2>
-					allow_neg_V = 1
-				}
-				MuscleReflex {
-					target = hamstrings
-					source = gastroc
-					delay = $knee_delay
-					KF = ~0.2<0,4>
-					F0 = ~0.15<0,0.5>
-					allow_neg_F = 0
-				}
+				#MuscleReflex {
+				#target = rect_fem
+				#delay = $ham_delay
+				#KL = ~0.5<0,4>
+				#L0 = ~0.94<0,2>
+				#}
+				#MuscleReflex {
+				#target = hamstrings
+				#delay = $ham_delay
+				##KF = ~0.1<-2,2>
+				#KL = ~1<0,4>
+				#L0 = ~0.82<0,2>
+				#KV = ~0.21<0,2>
+				#allow_neg_V = 1
+				#}
+				#MuscleReflex {
+				#target = hamstrings
+				#source = gastroc
+				#delay = $knee_delay
+				#KF = ~0.2<0,4>
+				#F0 = ~0.15<0,0.5>
+				#allow_neg_F = 0
+				#}
 				MuscleReflex {
 					target = bifemsh
 					delay = $knee_delay
@@ -206,16 +196,16 @@ GaitStateController {
 					L0 = ~0.67<0,2>
 				}
 				#MuscleReflex {
-					#target = rect_fem
-					#delay = $ham_delay
-					#KL = ~0.51<0,10>
-					#L0 = ~1.89<0,2>
+				#target = rect_fem
+				#delay = $ham_delay
+				#KL = ~0.51<0,10>
+				#L0 = ~1.89<0,2>
 				#}				
 				MuscleReflex {
 					target = rect_fem
 					delay = $ham_delay
 					KL = ~0.51<0,10>
-					L0 = ~1.1<1,2>
+					L0 = ~1.0<0,1.1>
 				}
 				
 				# balance
@@ -242,7 +232,8 @@ GaitStateController {
 					target = hamstrings
 					delay = $ham_delay
 					KL = ~0.72<-10,10>
-					L0 = ~1.17<0,2>
+					#L0 = ~1.17<0,2>
+					L0 = ~1.0<0,1.11>					
 					KV = ~0.02<0,2>
 					allow_neg_V = 1
 				}

@@ -10,10 +10,10 @@ function init( model, par )
     calcn_r = model:find_body("calcn_r")
 
     -- grf_threshold = 1.28
-    peak1_upper_limit = 1.28
-    peak2_upper_limit = 1.28
-    peak1_lower_limit = 0.9
-    peak2_lower_limit = 1.0
+    peak1_upper_limit = 1.28 -- 1.18
+    peak2_upper_limit = 1.28 -- 1.23
+    peak1_lower_limit = 0.9 -- 0.95
+    peak2_lower_limit = 1.0 -- 1.1
 
     cost = 0.0
     cost1 = 0.0

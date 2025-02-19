@@ -2,14 +2,23 @@ CmaOptimizer {
 	signature_prefix = DATE_TIME
 	min_progress = 1e-4
 	
-	#init { file = init/H1922GaitRS2Hfd4.par std_factor = 5 }	
+	init { file = init/H1922GaitRS2Hfd4.par std_factor = 5 }	
 	#init { file = init/H1922GaitRS2Hfd4_S11100RF_L0.par std_factor = 5 }
 	#init { file = init/H1922GaitRS2Hfd4_1.par std_factor = 5 }
 	#init { file = init/H1922GaitRS2Hfd4_2.par std_factor = 5 }
 	#init { file = init/H1922GaitRS2Hfd4_3.par std_factor = 5 }
-	init { file = init/H1922GaitRS2Hfd4_4.par std_factor = 1 }
-	#init { file = init/1095_61.338_1.090.par std_factor = 10 }
-	#init { file = init/test.par std_factor = 5 }
+	#init { file = init/H1922GaitRS2Hfd4_4.par std_factor = 5 }
+	#init { file = init/H1922GaitRS2Hfd4_5.par std_factor = 5 }
+	#init { file = init/H1922GaitRS2Hfd4_6.par std_factor = 5 }	
+	#init { file = init/H1922GaitRS2Hfd4_6_best.par std_factor = 5 }		
+	#init { file = init/H1922GaitRS2Hfd4_7.par std_factor = 5 }	
+	#init { file = init/H1922GaitRS2Hfd4_7_best.par std_factor = 1 }
+	#init { file = init/H1922GaitRS2Hfd4_8.par std_factor = 5 }	
+	#init { file = init/H1922GaitRS2Hfd4_8_fraction_std.par std_factor = 5 }	
+	#init { file = init/H1922GaitRS2Hfd4_8_fixed_std.par std_factor = 1 }	
+	#init { file = init/FMCH.par std_factor = 5 }	
+	#init { file = init/FMCH_fraction_std.par std_factor = 5 }	
+	#init { file = init/test.par std_factor = 0 }
 	
 	SimulationObjective {
 		max_duration = 20
@@ -29,34 +38,22 @@ CmaOptimizer {
 		
 		# Controller for gait
 		CompositeController {
+			#<< controllers/H1922RS2v3_Ham-RF-GMControllers4.scone >>
 			<< controllers/H1922RS2v3.scone >>
+			#<< controllers/H1922RS2v3_Bifemsh-VastiControllers.scone >>
+			#<< controllers/H1922RS2v3_Glut-MaxController.scone >>
+			#<< controllers/H1922RS2v3_IliopsoasController.scone >>
+			#<< controllers/H1922RS2v3_SOL-GASControllerS.scone >>
 			<< controllers/TorsoBO1v3.scone >>
 			NoiseController { base_noise = 0 proportional_noise = 0.01 random_seed = 0 }
 			ScriptController {
-				#script_file = "controllers/test.lua"
-				#script_file = "controllers/HamstringsController2.lua"
-				#script_file = "controllers/RFController3.lua"
-				#script_file = "controllers/GMController3.lua"
-				#script_file = "controllers/Ham-RFControllers2.lua"				
-				script_file = "controllers/Ham-RF-GMControllers3.lua"			
+				#script_file = "controllers/Ham-RF-GMControllers4.lua"			
+				#script_file = "controllers/Bifemsh-VastiControllers.lua"	
+				script_file = "controllers/FMCH.lua"
+				#script_file = "controllers/Glut-MaxController.lua"	
+				#script_file = "controllers/IliopsoasController.lua"	
+				#script_file = "controllers/SOL-GASControllers.lua"
 			}
-			#GaitStateController {
-			##signature_postfix = RS2
-			##auto_std_factor = 0.02
-			##stance_load_threshold = ~0.2<0.001,1>
-			###swing_load_threshold = ~0.05<0.001,1>
-			##leg_load_sensor_delay = 0
-			##symmetric = 1
-			#ConditionalControllers {
-			#ConditionalController {
-			#states = "EarlyStance " 		
-			#ScriptController {
-			#script_file = "controllers/GMController1.lua"					
-			#}
-			#}
-			#}
-			#}				
-			
 		}
 		
 		
@@ -66,9 +63,9 @@ CmaOptimizer {
 			<< measures/EffortWangCubed2000.scone >>
 			<< measures/DofKnee1.scone >>
 			<< measures/Grf13.scone >>
-			ScriptMeasure {
-				script_file = "measures/GRFMeasure1.lua"
-			}
+			#ScriptMeasure {
+			#script_file = "measures/GRFMeasure2.lua"
+			#}
 		}
 	}
 }

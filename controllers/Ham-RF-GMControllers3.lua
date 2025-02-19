@@ -10,17 +10,11 @@ function init( model, par, side )
     --     {name = "hamstrings", L0 = 0.78, alpha = 1.0, min = 0.6, max = 1.0},
     --     {name = "glut_med", L0 = 0.72, alpha = 1.0, min = 0.0, max = 1.0}
     -- }   -- 1174 gen 1.125
-    -- muscle_configs = {
-    --     {name = "rect_fem", L0 = 0.885, alpha = 1.0, min = 0.85, max = 0.9},
-    --     {name = "hamstrings", L0 = 0.799, alpha = 1.0, min = 0.6, max = 1.0},
-    --     {name = "glut_med", L0 = 0.738, alpha = 1.0, min = 0.0, max = 1.0}
-    -- }   -- 586 gen 1.754
     muscle_configs = {
-        {name = "rect_fem", L0 = 0.885, alpha = 2.0, min = 0.85, max = 0.9},
-        {name = "hamstrings", L0 = 0.95, alpha = 1.0, min = 0.95, max = 1.0},
-        -- {name = "hamstrings", L0 = 0.95, alpha = 2.0, min = 0.95, max = 1.0},
+        {name = "rect_fem", L0 = 0.885, alpha = 1.0, min = 0.85, max = 0.9},
+        {name = "hamstrings", L0 = 0.799, alpha = 1.0, min = 0.6, max = 1.0},
         {name = "glut_med", L0 = 0.738, alpha = 1.0, min = 0.0, max = 1.0}
-    }   -- 586 gen 1.754
+    }   -- 
     
     -- Initialize storage for muscle objects and parameters
     muscles = {}
@@ -49,22 +43,17 @@ function init( model, par, side )
         --               muscle_name == "hamstrings" and 0.5 or 
         --               3.2 -- for glut_med
         --               -- 1174 gen 1.125
-        -- local c_mean = muscle_name == "rect_fem" and 0.796 or
-        --               muscle_name == "hamstrings" and 1.137 or 
-        --               3.138 -- for glut_med
-        --               -- 586 gen 1.754
         local c_mean = muscle_name == "rect_fem" and 0.796 or
-                       muscle_name == "hamstrings" and 1.137 or 
-                       3.138 -- for glut_med
-                       -- 586 gen 1.754
-       
+                      muscle_name == "hamstrings" and 1.137 or 
+                      3.138 -- for glut_med
+                      -- 
+
+        
         params[muscle_name] = {
             -- c = par:create_from_mean_std(muscle_name .. ".c", c_mean, 0.1, 0.0, 5.0),
             -- L0 = par:create_from_mean_std(muscle_name .. ".L0", default_L0, 0.01, min, max), -- 1174 gen 1.125
             c = par:create_from_mean_std(muscle_name .. ".c", c_mean, 0.01, 0.0, 5.0),
-            L0 = par:create_from_mean_std(muscle_name .. ".L0", default_L0, 0.001, min, max),    -- 586 gen 1.754
-            -- c = par:create_from_mean_std(muscle_name .. ".c", c_mean, 0.006, 0.0, 5.0),
-            -- L0 = par:create_from_mean_std(muscle_name .. ".L0", default_L0, 0.0006, min, max),    -- 
+            L0 = par:create_from_mean_std(muscle_name .. ".L0", default_L0, 0.001, min, max),    -- 
             alpha = config.alpha 
         }
     end

@@ -3,7 +3,7 @@ CmaOptimizer {
 	min_progress = 1e-4
 	
 	#init { file = init/H1922GaitRS2Hfd4.par std_factor = 5 }
-	init { file = init/test.par std_factor = 5 }
+	init { file = init/PD_perturbation_test.par std_factor = 0 }
 	
 	SimulationObjective {
 		max_duration = 20
@@ -19,6 +19,7 @@ CmaOptimizer {
 			initial_load = 1
 			use_omnidirectional_root_dofs = 1
 			fixed_control_step_size = 0.005
+			enable_external_forces = 1
 		}
 		
 		# Controller for gait
@@ -26,6 +27,26 @@ CmaOptimizer {
 			<< controllers/H1922RS2v3_original.scone >>
 			<< controllers/TorsoBO1v3.scone >>
 			NoiseController { base_noise = 0 proportional_noise = 0.01 random_seed = 0 }
+			
+			PerturbationController {
+			#name = PushForward
+			start_time = 7.05
+			#stride time of this step = 1.15s (average stride time is 1.12s)
+			#0% 7.05
+			#20% 7.28 = 7.05 + 0.2 * 1.15
+			#40% 7.51 = 7.05 + 0.4 * 1.15
+			#60% 7.74 = 7.05 + 0.6 * 1.15
+			#80% 7.97 = 7.05 + 0.8 * 1.15
+			duration = 0.1
+			interval = 20
+			#force = [ -14 0 0 ]
+			force = [ 30 0 0 ]
+			#moment = [ 0 0 30 ]
+			#moment = [ 0 0 -10 ]
+			body = torso
+			position_offset = [ 0 0.05 0 ]
+			}			
+			
 		}
 		
 		# Measure for gait
